@@ -7,6 +7,42 @@
 
 # LIBRARIES
  
+  library(ggplot2)
+  library(plyr)
+  library(nlme)
+  library(grid)
+
+  wd = getwd()
+
+ 
+# FUNCTIONS   
+ 
+  # function for extracting end of string
+    substrRight = function(x, n){
+      substr(x, nchar(x)-n+1, nchar(x))
+    }
+
+  # function for extracting start of string
+    substrLeft = function(x, n){
+    substr(x, 1, n)
+  }
+
+
+# READING IN DATA AND CREATING DATA FRAMES FOR EACH GROUP
+
+  group = c("ldrc_[0-9]_[0-9][0-9][0-9]", "ldrc_*second", "ldrc_*third", "ldrc2_[0-9]_[0-9][0-9][0-9]","ldrc2_*second", "PHILIPS/H_LD*_[0-9]", "H_LD*_[0-9]_second", "H_LD*_[0-9]_third", "LDFHO*_[0-9]", "LDFHO*_second","ldrc_c_[0-9][0-9][0-9]", "PHILIPS/H_LD*[0-9][0-9][0-9][0-9]", "H_LD*_c_second", "H_LD*_c_third")
+  chars=c(10,17,16,11,18,13,20,19,12,19,10,11,20,19)
+
+  # GROUP
+  for (i in 1:length(group)){ 
+    subdirs = Sys.glob(sprintf("/corral-repl/utexas/ldrc/%s" ,group[i]))
+    rm("dat_all")
+    print(group[i])
+    # SUB
+    for (sub in subdirs){
+      behav_dirs = c(Sys.glob(sprintf("%s/behav/SC/SC_R*", sub))) #Sys.glob(sprintf("%s/behav/SC/m_SC_R*", sub)), Sys.glob(sprintf("%s/behav/SC/x_SC_R*", sub)), Sys.glob(sprintf("%s/behav/x_SC/SC_R*", sub)))
+      subnum = substrRight(sub, chars[i])
+
 	# RUN
         for (run in behav_dirs){
           run_num = substrRight(run,1)
